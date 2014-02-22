@@ -1,34 +1,20 @@
 #!/bin/bash
 
 var fs = require('fs');
-var select = require('json-select');
-var through = require('through');
 var minimist = require('minimist');
-var byPoly = require('../');
+var JSONStream = require('JSONStream');
+
 var argv = minimist(process.argv.slice(2));
+var by = require('../')();
 
-var points = [];
-var shapes = [];
-var files = argv._;
-
-files.forEach(function (file) {
-    var stream = fs.createReadStream(file);
-    var sel = select([ 'features', true, {
-        name: [ 'properties', 'Name' ],
-        points: [ 'geometry', 'coordinates' ],
-        type: [ 'geometry', 'type' ]
-    } ]);
-    stream.pipe(sel).pipe(through(write, end));
-    
-    function write (row) {
-        if (row.type === 'Polygon') {
-            var pts = row.points[0];
-        }
-        else if (row.type === 'Point') {
-            
-            console.log(row);
-        }
-    }
-    function end () {}
+by.on('region', function (region) {
+    console.log('DISTRICT ' + region.name);
+    var outfile = __dirname + '/' + region.name + '.geojson';
+    region.pipe(JSONStream.stringify())
+        .pipe(fs.createWriteStream(outfile))
+    ;
 });
-byPoly();
+
+argv._.forEach(function (file) {
+    fs.createReadStream(file).pipe(by.createStream());
+});
