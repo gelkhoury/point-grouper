@@ -13,23 +13,22 @@ var files = argv._;
 
 files.forEach(function (file) {
     var stream = fs.createReadStream(file);
-    stream.pipe(
-        select([ 'features', true, {
-            name: [ 'properties', 'Name' ]
-        } ]))
-        .pipe(through(polyWrite, polyEnd))
-    ;
-    function polyWrite (row) {
-        console.log(row);
+    var sel = select([ 'features', true, {
+        name: [ 'properties', 'Name' ],
+        points: [ 'geometry', 'coordinates' ],
+        type: [ 'geometry', 'type' ]
+    } ]);
+    stream.pipe(sel).pipe(through(write, end));
+    
+    function write (row) {
+        if (row.type === 'Polygon') {
+            var pts = row.points[0];
+        }
+        else if (row.type === 'Point') {
+            
+            console.log(row);
+        }
     }
-    function polyEnd () {
-    }
-    /*
-    else if (row.type === 'Point') {
-        var pt = row.coordinates;
-        pt[0]
-        pt[1]
-    }
-    */
+    function end () {}
 });
 byPoly();
