@@ -3,6 +3,7 @@ var through = require('through2');
 var inRegion = require('point-in-polygon');
 var inherits = require('inherits');
 var EventEmitter = require('events').EventEmitter;
+var gutter = require('gutter');
 
 module.exports = ByPoly;
 inherits(ByPoly, EventEmitter);
@@ -18,28 +19,31 @@ function ByPoly () {
 ByPoly.prototype.createWriteStream = function () {
     var self = this;
     self.pending ++;
-    var sel = select([ 'features', true, {
-        name: [ 'properties', 'Name' ],
-        points: [ 'geometry', 'coordinates' ],
-        type: [ 'geometry', 'type' ]
-    } ]);
+    var sel = select([ 'features', true ]);
     sel.pipe(through({ objectMode: true }, write, end));
     return sel;
     
-    function write (row, enc, next) {
-        if (row.type === 'Polygon') {
-            var region = through({ objectMode: true });
-            region.name = row.name;
+    function write (feature, enc, next) {
+        var geom = feature.geometry;
+        if (geom.type === 'Polygon') {
+            var points = through({ objectMode: true });
+            var region = gutter({
+                type: 'FeatureCollection',
+                features: points
+            });
+            region.name = feature.properties.Name;
+            region.feature = feature;
             region.index = self.regions.length;
-            region.points = row.points[0];
+            region.coordinates = geom.coordinates[0];
+            region.stream = points;
             self.regions.push(region);
             self.emit('region', region);
         }
-        else if (row.type === 'Point') {
+        else if (geom.type === 'Point') {
             for (var i = 0; i < self.regions.length; i++) {
                 var r = self.regions[i];
-                if (inRegion(row.points, r.points)) {
-                    r.push(row);
+                if (inRegion(geom.coordinates, r.coordinates)) {
+                    r.stream.push(feature);
                 }
             }
         }
