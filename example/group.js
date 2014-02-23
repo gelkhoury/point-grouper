@@ -1,8 +1,8 @@
 var fs = require('fs');
 var path = require('path');
-var xgroup = require('../');
+var grouper = require('../');
 
-var g = xgroup();
+var g = grouper();
 g.on('region', function (region) {
     console.log('REGION ' + region.name);
     var outfile = path.join(__dirname, 'output', region.name + '.geojson');

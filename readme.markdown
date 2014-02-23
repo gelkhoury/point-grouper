@@ -1,15 +1,15 @@
 # point-grouper
 
-group points into polygons that contain the points
+group geojson points into polygons that contain the points
 
 # example
 
 ``` js
 var fs = require('fs');
 var path = require('path');
-var xgroup = require('point-grouper');
+var grouper = require('point-grouper');
 
-var g = xgroup();
+var g = grouper();
 g.on('region', function (region) {
     console.log('REGION ' + region.name);
     var outfile = path.join(__dirname, 'output', region.name + '.geojson');
@@ -61,3 +61,51 @@ $ point-grouper districts.json trees.geojson -o output/
 ```
 usage: point-grouper FILES {-o OUTDIR}
 ```
+
+# methods
+
+``` js
+var grouper = require('point-grouper')
+```
+
+## var g = grouper(cb)
+
+Create a new grouper.
+
+Optionally provide a `cb(err, region)` listener for `'error'` and `'region'`
+events.
+
+## g.createWriteStream()
+
+# events
+
+## g.on('region', function (region) {})
+
+When a region (any polygon) was read from one of the input files, this event
+fires with `region`, a readable stream of geojson data for all of the points
+contained in the region.
+
+The `region` stream has these properties:
+
+* `region.index` - the numeric index of the region
+* `region.name` - the property Name if one was present
+* `region.feature` - the feature data for the region polygon
+* `region.coordinates` - an array of the points in the region shape
+
+# install
+
+With [npm](https://npmjs.org), to get the library do:
+
+```
+npm install point-grouper
+```
+
+and to get the `point-grouper` command do:
+
+```
+npm install -g point-grouper
+```
+
+# license
+
+MIT
