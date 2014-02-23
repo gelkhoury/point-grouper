@@ -9,6 +9,9 @@ var xgroup = require('../');
 var argv = minimist(process.argv.slice(2), {
     alias: { o: 'outdir' }
 });
+if (argv.h || argv.help) return usage(0);
+if (process.argv.length === 2) return usage(1);
+
 var dir = argv.outdir || process.cwd();
 mkdirp.sync(dir);
 
@@ -23,3 +26,9 @@ argv._.forEach(function (file) {
     var ws = g.createWriteStream();
     fs.createReadStream(file).pipe(ws);
 });
+
+function usage (code) {
+    var rs = fs.createReadStream(__dirname + '/usage.txt');
+    rs.pipe(process.stdout);
+    if (code) rs.on('end', function () { process.exit(code) });
+}

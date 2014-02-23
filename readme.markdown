@@ -59,4 +59,5 @@ $ point-grouper districts.json trees.geojson -o output/
 # usage
 
 ```
+usage: point-grouper FILES {-o OUTDIR}
 ```
