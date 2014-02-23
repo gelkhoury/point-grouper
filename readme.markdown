@@ -2,6 +2,8 @@
 
 group geojson points into containing polygons
 
+[![build status](https://secure.travis-ci.org/substack/point-grouper.png)](http://travis-ci.org/substack/point-grouper)
+
 # example
 
 ``` js
