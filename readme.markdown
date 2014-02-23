@@ -1,6 +1,6 @@
 # point-grouper
 
-group geojson points into polygons that contain the points
+group geojson points into containing polygons
 
 # example
 

@@ -1,0 +1,40 @@
+{
+  "name": "point-grouper",
+  "version": "0.0.0",
+  "description": "group geojson points into containing polygons",
+  "main": "index.js",
+  "dependencies": {
+    "inherits": "~2.0.1",
+    "json-select": "~2.2.0",
+    "minimist": "~0.0.8",
+    "mkdirp": "~0.3.5",
+    "point-in-polygon": "~0.0.0",
+    "through2": "~0.4.1"
+  },
+  "devDependencies": {
+    "tape": "~2.3.2",
+    "concat-stream": "~1.4.1"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/point-grouper.git"
+  },
+  "homepage": "https://github.com/substack/point-grouper",
+  "keywords": [
+    "geojson",
+    "group",
+    "region",
+    "polygon",
+    "point",
+    "gis"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT"
+}
