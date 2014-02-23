@@ -16,5 +16,6 @@ by.on('region', function (region) {
 });
 
 argv._.forEach(function (file) {
-    fs.createReadStream(file).pipe(by.createStream());
+    var ws = by.createWriteStream();
+    fs.createReadStream(file).pipe(ws);
 });

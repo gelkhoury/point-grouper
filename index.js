@@ -12,11 +12,12 @@ function ByPoly () {
     EventEmitter.call(this);
     this.points = [];
     this.regions = [];
-    this.streams = [];
+    this.pending = 0;
 }
 
-ByPoly.prototype.createStream = function () {
+ByPoly.prototype.createWriteStream = function () {
     var self = this;
+    self.pending ++;
     var sel = select([ 'features', true, {
         name: [ 'properties', 'Name' ],
         points: [ 'geometry', 'coordinates' ],
@@ -44,5 +45,11 @@ ByPoly.prototype.createStream = function () {
         }
         next();
     }
-    function end () {}
+    function end () {
+        if (--self.pending === 0) {
+            self.regions.forEach(function (r) {
+                r.push(null);
+            });
+        }
+    }
 };
