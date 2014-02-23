@@ -7,12 +7,16 @@ var EventEmitter = require('events').EventEmitter;
 module.exports = ByPoly;
 inherits(ByPoly, EventEmitter);
 
-function ByPoly () {
+function ByPoly (cb) {
     if (!(this instanceof ByPoly)) return new ByPoly;
     EventEmitter.call(this);
     this.unmatched = [];
     this.regions = [];
     this.pending = 0;
+    if (cb) {
+        this.on('error', cb);
+        this.on('region', function (r) { cb(null, r) });
+    }
 }
 
 ByPoly.prototype.createWriteStream = function () {
