@@ -23,6 +23,9 @@ ByPoly.prototype.createWriteStream = function () {
     var self = this;
     self.pending ++;
     var sel = select([ 'features', true ]);
+    sel.on('error', function (err) {
+        self.emit('error', err);
+    });
     sel.pipe(through({ objectMode: true }, write, end));
     return sel;
     
