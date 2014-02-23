@@ -13,7 +13,6 @@ function ByPoly () {
     this.unmatched = [];
     this.regions = [];
     this.pending = 0;
-    this.wrote = 0;
 }
 
 ByPoly.prototype.createWriteStream = function () {
@@ -45,7 +44,6 @@ ByPoly.prototype.createWriteStream = function () {
             for (var i = 0; i < len; i++) {
                 var r = self.regions[i];
                 if (inRegion(geom.coordinates, r.coordinates)) {
-                    self.wrote ++;
                     r.write(feature);
                     break;
                 }

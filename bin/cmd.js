@@ -15,7 +15,6 @@ mkdirp.sync(dir);
 var g = xgroup();
 
 g.on('region', function (region) {
-    console.log('DISTRICT ' + region.name);
     var outfile = path.join(dir, region.name + '.geojson');
     region.pipe(fs.createWriteStream(outfile));
 });
