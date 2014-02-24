@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "group geojson points into containing polygons",
   "main": "index.js",
+  "bin": {
+    "point-grouper": "bin/cmd.js"
+  },
   "dependencies": {
     "inherits": "~2.0.1",
     "json-select": "~2.2.0",
