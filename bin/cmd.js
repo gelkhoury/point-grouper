@@ -7,7 +7,8 @@ var mkdirp = require('mkdirp');
 var xgroup = require('../');
 
 var argv = minimist(process.argv.slice(2), {
-    alias: { o: 'outdir' }
+    alias: { o: 'outdir', v: 'verbose' },
+    boolean: 'v'
 });
 if (argv.h || argv.help) return usage(0);
 if (process.argv.length === 2) return usage(1);
@@ -18,6 +19,7 @@ mkdirp.sync(dir);
 var g = xgroup();
 
 g.on('region', function (region) {
+    if (argv.verbose) console.log('REGION', region.name);
     var outfile = path.join(dir, region.name + '.geojson');
     region.pipe(fs.createWriteStream(outfile));
 });

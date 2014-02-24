@@ -73,7 +73,10 @@ ByPoly.prototype.createWriteStream = function () {
 function createRegion (feature) {
     var region = through({ objectMode: true }, write, end);
     region.push('{"type":"FeatureCollection","features":[');
-    region.name = feature.properties.Name;
+    region.name = feature.properties.Name
+        || feature.properties.name
+        || feature.properties.NAME
+    ;
     region.feature = feature;
     region.coordinates = feature.geometry.coordinates[0];
     
