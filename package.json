@@ -1,6 +1,6 @@
 {
   "name": "point-grouper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "group geojson points into containing polygons",
   "main": "index.js",
   "bin": {
