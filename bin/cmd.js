@@ -20,7 +20,7 @@ var g = xgroup();
 
 g.on('region', function (region) {
     if (argv.verbose) console.log('REGION', region.name);
-    var outfile = path.join(dir, region.name + '.geojson');
+    var outfile = path.join(dir, nameOf(region) + '.geojson');
     region.pipe(fs.createWriteStream(outfile));
 });
 
@@ -33,4 +33,10 @@ function usage (code) {
     var rs = fs.createReadStream(__dirname + '/usage.txt');
     rs.pipe(process.stdout);
     if (code) rs.on('end', function () { process.exit(code) });
+}
+
+function nameOf (region) {
+    return (region.name || ('region_' + region.index))
+        .trim().replace(/[\/ ]+/g, '_')
+    ;
 }
